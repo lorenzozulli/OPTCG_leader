@@ -1,0 +1,163 @@
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:optcgcounter_flutter/entities/leader.dart';
+
+class LeaderSelection extends StatefulWidget {
+  const LeaderSelection ({super.key});
+
+  @override
+  State<LeaderSelection> createState() => _LeaderSelectionState();
+}
+
+class _LeaderSelectionState extends State<LeaderSelection> {
+  final List<Leader> _allLeaders = <Leader>[]; // Lista di tutte le carte
+  List<Leader> _filteredLeaders = <Leader>[]; // Lista delle carte attualmente visualizzate (filtrate)
+  final SearchController _searchController = SearchController();
+
+  Future<List<Leader>> fetchLeaders() async {
+    String url = "https://raw.githubusercontent.com/lorenzozulli/optcg_leaders_list/refs/heads/main/leaders.json";
+    var response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> decodedJson = json.decode(response.body);
+      final List<dynamic> cardDataList = decodedJson['data'];
+      return cardDataList.map((json) => Leader.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to load cards');
+    }
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    fetchLeaders().then((value){
+      setState((){
+        _allLeaders.addAll(value);
+        _filteredLeaders.addAll(value); // Inizialmente, la lista filtrata è uguale a quella completa
+      });
+    });
+
+    // Aggiungi un listener al SearchController per rilevare i cambiamenti nel testo
+    _searchController.addListener(_onSearchChanged);
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_onSearchChanged);
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _onSearchChanged() {
+    final String query = _searchController.text.toLowerCase();
+    setState(() {
+      if (query.isEmpty) {
+        _filteredLeaders = List.from(_allLeaders); // Se la query è vuota, mostra tutte le carte
+      } else {
+        _filteredLeaders = _allLeaders.where((leader) {
+          return leader.name.toLowerCase().contains(query);
+        }).toList();
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context){
+    return Column(
+      children: [
+        SearchAnchor.bar(
+          searchController: _searchController,
+          barHintText: 'Search leaders...',
+          suggestionsBuilder: (context, controller) async {
+            // Le "suggestions" sono quelle che appaiono sotto la barra di ricerca
+            // quando l'utente digita. Non sono direttamente legate alla lista sottostante,
+            // ma possono usare la stessa logica di filtro.
+            final String query = controller.text.toLowerCase();
+            if (query.isEmpty) {
+              return _allLeaders.map((leader) { // Mostra tutte le suggerite se la query è vuota
+                return ListTile(
+                  title: Text('${leader.name}, ${leader.id}'),
+                  onTap: () {
+                    controller.closeView('${leader.name}, ${leader.id}');
+                    // Quando selezioni una suggestion, aggiorna anche il campo di testo
+                    // e attiva la ricerca.
+                    _searchController.text = '${leader.name}, ${leader.id}';
+                    _onSearchChanged(); // Forza l'aggiornamento della lista sottostante
+                  },
+                );
+              }).toList();
+            } else {
+              final filteredSuggestions = _allLeaders.where((leader) {
+                return leader.name.toLowerCase().contains(query);
+              }).toList();
+
+              return filteredSuggestions.map((leader) {
+                return ListTile(
+                  title: Text('${leader.name}, ${leader.id}'),
+                  onTap: () {
+                    controller.closeView(leader.name);
+                    _searchController.text = leader.name;
+                    _onSearchChanged(); // Forza l'aggiornamento della lista sottostante
+                  },
+                );
+              }).toList();
+            }
+          },
+        ),
+
+        Expanded( // Assicurati che lo Scaffold/ListView abbia spazio sufficiente
+          child: ListView.builder(
+            itemBuilder: (context, index){
+              // Usa _filteredLeaders invece di _allLeaders
+              if (_filteredLeaders.isEmpty) {
+                return const Center(child: Text("Nessun leader trovato."));
+              }
+              return Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    children: [
+                      Image.network(
+                        _filteredLeaders[index].image, // Usa _filteredLeaders
+                        width: 50,
+                        height: 100
+                      ),
+                      const SizedBox(width: 16), // Spazio tra immagine e testo
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            _filteredLeaders[index].name, // Usa _filteredLeaders
+                            style: const TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold
+                            )
+                          ),
+                          Text(
+                            _filteredLeaders[index].id, // Usa _filteredLeaders
+                            style: TextStyle(
+                              color: Colors.grey.shade700
+                            ),
+                          ),
+                          Text(
+                            "(${_filteredLeaders[index].life}) LIFE", // Usa _filteredLeaders
+                            style: TextStyle(
+                                color: Colors.grey.shade700
+                            ),
+                          ),
+                        ],              
+                      ),
+                    ],
+                  )
+                ),
+              );
+            },
+            itemCount: _filteredLeaders.length, // Usa _filteredLeaders.length
+          ),
+        ),
+      ],
+    );
+  }
+}
