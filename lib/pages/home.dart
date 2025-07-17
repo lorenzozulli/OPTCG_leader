@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class UserHome extends StatefulWidget{
+  //final Leader leader;
+
   const UserHome ({super.key});
 
   @override
@@ -8,6 +10,7 @@ class UserHome extends StatefulWidget{
 }
 
 class _UserHomeState extends State<UserHome> {
+  
   int power = 0;
 
   void increasePower(){
@@ -22,7 +25,7 @@ class _UserHomeState extends State<UserHome> {
     });
   }
 
-  int life = 5;
+  late int life;
 
   void increaseLife(){
     setState(() {
@@ -34,6 +37,17 @@ class _UserHomeState extends State<UserHome> {
     setState(() {
       if(life>0) life = life-1;
     });
+  }
+
+  @override
+  void initState(){
+    super.initState();
+      try{
+        //life = int.parse(widget.leader.life);
+        life = 5;
+      } catch (e) {
+        print(e);
+      }
   }
 
     @override
@@ -63,9 +77,13 @@ class _UserHomeState extends State<UserHome> {
 
             children: [
               InkWell(
-                onTap: () {},
-                child: Ink.image(
-                  image: AssetImage('/home/zulli/Documents/RAYLEIGH/OP01-024.png'),
+                onTap: () {
+                  Center(
+                    child: Text('Ability Used'),
+                  );
+                },
+                child: Image.asset(
+                  '/home/zulli/Documents/RAYLEIGH/OP01-024.png',
                   width: MediaQuery.of(context).size.width,
                   height: 500,
                   )

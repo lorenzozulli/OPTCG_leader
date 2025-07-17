@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:optcgcounter_flutter/entities/leader.dart';
+import 'package:optcgcounter_flutter/pages/leaderdetails.dart';
 
 class LeaderSelection extends StatefulWidget {
   const LeaderSelection ({super.key});
@@ -21,7 +22,7 @@ class _LeaderSelectionState extends State<LeaderSelection> {
     var response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
-      final Map<String, dynamic> decodedJson = json.decode(response.body);
+      final Map<dynamic, dynamic> decodedJson = json.decode(response.body);
       final List<dynamic> cardDataList = decodedJson['data'];
       return cardDataList.map((json) => Leader.fromJson(json)).toList();
     } else {
@@ -35,11 +36,9 @@ class _LeaderSelectionState extends State<LeaderSelection> {
     fetchLeaders().then((value){
       setState((){
         _allLeaders.addAll(value);
-        _filteredLeaders.addAll(value); // Inizialmente, la lista filtrata è uguale a quella completa
+        _filteredLeaders.addAll(value);
       });
     });
-
-    // Aggiungi un listener al SearchController per rilevare i cambiamenti nel testo
     _searchController.addListener(_onSearchChanged);
   }
 
@@ -54,7 +53,7 @@ class _LeaderSelectionState extends State<LeaderSelection> {
     final String query = _searchController.text.toLowerCase();
     setState(() {
       if (query.isEmpty) {
-        _filteredLeaders = List.from(_allLeaders); // Se la query è vuota, mostra tutte le carte
+        _filteredLeaders = List.from(_allLeaders);
       } else {
         _filteredLeaders = _allLeaders.where((leader) {
           return leader.name.toLowerCase().contains(query);
@@ -71,20 +70,15 @@ class _LeaderSelectionState extends State<LeaderSelection> {
           searchController: _searchController,
           barHintText: 'Search leaders...',
           suggestionsBuilder: (context, controller) async {
-            // Le "suggestions" sono quelle che appaiono sotto la barra di ricerca
-            // quando l'utente digita. Non sono direttamente legate alla lista sottostante,
-            // ma possono usare la stessa logica di filtro.
             final String query = controller.text.toLowerCase();
             if (query.isEmpty) {
-              return _allLeaders.map((leader) { // Mostra tutte le suggerite se la query è vuota
+              return _allLeaders.map((leader) { 
                 return ListTile(
                   title: Text('${leader.name}, ${leader.id}'),
                   onTap: () {
                     controller.closeView('${leader.name}, ${leader.id}');
-                    // Quando selezioni una suggestion, aggiorna anche il campo di testo
-                    // e attiva la ricerca.
                     _searchController.text = '${leader.name}, ${leader.id}';
-                    _onSearchChanged(); // Forza l'aggiornamento della lista sottostante
+                    _onSearchChanged();
                   },
                 );
               }).toList();
@@ -99,7 +93,7 @@ class _LeaderSelectionState extends State<LeaderSelection> {
                   onTap: () {
                     controller.closeView(leader.name);
                     _searchController.text = leader.name;
-                    _onSearchChanged(); // Forza l'aggiornamento della lista sottostante
+                    _onSearchChanged();
                   },
                 );
               }).toList();
@@ -107,54 +101,62 @@ class _LeaderSelectionState extends State<LeaderSelection> {
           },
         ),
 
-        Expanded( // Assicurati che lo Scaffold/ListView abbia spazio sufficiente
+        Expanded(
           child: ListView.builder(
             itemBuilder: (context, index){
-              // Usa _filteredLeaders invece di _allLeaders
               if (_filteredLeaders.isEmpty) {
                 return const Center(child: Text("Nessun leader trovato."));
               }
               return Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    children: [
-                      Image.network(
-                        _filteredLeaders[index].image, // Usa _filteredLeaders
-                        width: 50,
-                        height: 100
+                child: InkWell(
+                  onTap:() {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Leaderdetails(leader: _filteredLeaders[index]),
                       ),
-                      const SizedBox(width: 16), // Spazio tra immagine e testo
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            _filteredLeaders[index].name, // Usa _filteredLeaders
-                            style: const TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold
-                            )
-                          ),
-                          Text(
-                            _filteredLeaders[index].id, // Usa _filteredLeaders
-                            style: TextStyle(
-                              color: Colors.grey.shade700
+                    );
+                  },
+
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      children: [
+                        Image.network(
+                          _filteredLeaders[index].images.imageEn,
+                          width: 50,
+                          height: 100
+                        ),
+                        const SizedBox(width: 16),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              _filteredLeaders[index].name,
+                              style: const TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold
+                              )
                             ),
-                          ),
-                          Text(
-                            "(${_filteredLeaders[index].life}) LIFE", // Usa _filteredLeaders
-                            style: TextStyle(
+                            Text(
+                              _filteredLeaders[index].id,
+                              style: TextStyle(
                                 color: Colors.grey.shade700
+                              ),
                             ),
-                          ),
-                        ],              
-                      ),
-                    ],
-                  )
-                ),
-              );
+                            Text(
+                              "(${_filteredLeaders[index].life}) LIFE",
+                              style: TextStyle(
+                                  color: Colors.grey.shade700
+                              ),
+                            ),
+                          ],              
+                        ),
+                      ],
+                    )
+                  ),
+                )
+                );
             },
-            itemCount: _filteredLeaders.length, // Usa _filteredLeaders.length
+            itemCount: _filteredLeaders.length,
           ),
         ),
       ],
