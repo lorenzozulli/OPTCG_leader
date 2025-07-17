@@ -7,13 +7,22 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:optcgcounter_flutter/entities/leader.dart';
 
 import 'package:optcgcounter_flutter/main.dart';
 
 void main() {
+  final Leader defaultLeader = Leader(
+    name: 'Kozuki Oden', // Provide a default name
+    id: 'EB01-001',       // Provide a default ID
+    images: Images(imageEn: 'https://en.onepiece-cardgame.com/images/cardlist/card/EB01-001.png?250701', imagesAlt: []), // Provide default images
+    life: '4',           // Provide default life
+    power: '5000',          // Provide default power
+    colors: ['green','red'],        // Provide default colors
+  );
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(MyApp(leader: defaultLeader));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

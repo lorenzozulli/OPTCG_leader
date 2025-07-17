@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:optcgcounter_flutter/entities/leader.dart';
+import 'package:optcgcounter_flutter/pages/home.dart';
 
 class Leaderdetails extends StatelessWidget {
   final Leader leader;
@@ -98,7 +99,7 @@ class Leaderdetails extends StatelessWidget {
                     height: 10,
                   ),
                   Text(
-                    "Food .60 min",
+                    leader.id,
                   ),
                   const SizedBox(
                     height: 15,
@@ -134,8 +135,8 @@ class Leaderdetails extends StatelessWidget {
                   ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: 3,
-                    itemBuilder: (context, index) => altLeaders(context),
+                    itemCount: leader.images.imagesAlt.length,
+                    itemBuilder: (context, index) => altLeaders(context, index),
                   ),
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 15),
@@ -162,7 +163,7 @@ class Leaderdetails extends StatelessWidget {
         });
   }
 
-  altLeaders(BuildContext context) {
+  altLeaders(BuildContext context, index) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Row(
@@ -170,9 +171,21 @@ class Leaderdetails extends StatelessWidget {
           const SizedBox(
             width: 10,
           ),
-          Text(
-            "4 Eggs",
+          InkWell(
+            onTap: (){
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => UserHome(leader: leader),
+                ),
+              );
+            },
+            child: Image.network(
+              leader.images.imagesAlt[index],
+              width: MediaQuery.of(context).size.width,
+              height: 200,
           ),
+
+          ),
+
         ],
       ),
     );

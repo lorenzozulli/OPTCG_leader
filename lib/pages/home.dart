@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:optcgcounter_flutter/entities/leader.dart';
 
 class UserHome extends StatefulWidget{
-  //final Leader leader;
+  final Leader leader;
 
-  const UserHome ({super.key});
+  const UserHome ({super.key, required this.leader});
 
   @override
   State<UserHome> createState() => _UserHomeState();
@@ -43,8 +44,7 @@ class _UserHomeState extends State<UserHome> {
   void initState(){
     super.initState();
       try{
-        //life = int.parse(widget.leader.life);
-        life = 5;
+        life = int.parse(widget.leader.life);
       } catch (e) {
         print(e);
       }
@@ -82,8 +82,8 @@ class _UserHomeState extends State<UserHome> {
                     child: Text('Ability Used'),
                   );
                 },
-                child: Image.asset(
-                  '/home/zulli/Documents/RAYLEIGH/OP01-024.png',
+                child: Image.network(
+                  widget.leader.images.imageEn,
                   width: MediaQuery.of(context).size.width,
                   height: 500,
                   )
