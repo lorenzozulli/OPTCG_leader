@@ -79,15 +79,16 @@ class _UserHomeState extends State<UserHome> {
               InkWell(
                 onTap: () {
                   Center(
-                    child: Text('Ability Used'),
+                    child: Text(
+                      "Ability Used",
+                    ),
                   );
                 },
                 child: Image.network(
                   widget.leader.images.imageEn,
-                  width: MediaQuery.of(context).size.width,
-                  height: 500,
-                  )
-              )
+                  width: 400,
+                  height: 500,),  
+                )
             ],
           ),
 

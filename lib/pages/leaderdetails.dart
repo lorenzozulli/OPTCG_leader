@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:optcgcounter_flutter/entities/leader.dart';
-import 'package:optcgcounter_flutter/pages/home.dart';
 
 class Leaderdetails extends StatelessWidget {
   final Leader leader;
@@ -132,6 +131,19 @@ class Leaderdetails extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
+                  InkWell(
+                    onTap: (){
+
+                    },
+                    child: Image.network(
+                      leader.images.imageEn,
+                      width: 200,
+                      height: 500,
+                    )
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
@@ -172,20 +184,15 @@ class Leaderdetails extends StatelessWidget {
             width: 10,
           ),
           InkWell(
-            onTap: (){
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => UserHome(leader: leader),
-                ),
-              );
+            onTap: () {
+
             },
             child: Image.network(
               leader.images.imagesAlt[index],
-              width: MediaQuery.of(context).size.width,
-              height: 200,
+              width: 200,
+              height: 500,
+            ),
           ),
-
-          ),
-
         ],
       ),
     );
