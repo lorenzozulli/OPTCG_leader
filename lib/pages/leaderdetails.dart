@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:optcgcounter_flutter/entities/leader.dart';
+import 'package:optcgcounter_flutter/main.dart';
 
 class Leaderdetails extends StatelessWidget {
   final Leader leader;
@@ -133,7 +134,10 @@ class Leaderdetails extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: (){
-
+                      Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => MyApp(leader: leader),
+                        ),
+                      );
                     },
                     child: Image.network(
                       leader.images.imageEn,
@@ -149,24 +153,6 @@ class Leaderdetails extends StatelessWidget {
                     shrinkWrap: true,
                     itemCount: leader.images.imagesAlt.length,
                     itemBuilder: (context, index) => altLeaders(context, index),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 15),
-                    child: Divider(
-                      height: 4,
-                    ),
-                  ),
-                  Text(
-                    "Steps",
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: 3,
-                    itemBuilder: (context, index) => steps(context, index),
                   ),
                 ],
               ),
@@ -185,7 +171,10 @@ class Leaderdetails extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
-
+                Navigator.push(context,
+                MaterialPageRoute(builder: (context) => MyApp(leader: leader),
+                ),
+              );
             },
             child: Image.network(
               leader.images.imagesAlt[index],
@@ -198,33 +187,4 @@ class Leaderdetails extends StatelessWidget {
     );
   }
 
-  steps(BuildContext context, int index) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          CircleAvatar(
-            radius: 12,
-            child: Text("${index + 1}"),
-          ),
-          Column(
-            children: [
-              SizedBox(
-                width: 270,
-                child: Text(
-                  "Your recipe has been uploaded, you can see it on your profile. Your recipe has been uploaded, you can see it on your",
-                  maxLines: 3,
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-            ],
-          )
-        ],
-      ),
-    );
-  }
 }
