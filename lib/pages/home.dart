@@ -41,6 +41,9 @@ class _UserHomeState extends State<UserHome> {
     });
   }
 
+  bool _isAbilityUsed = false;
+
+
   @override
   void initState(){
     super.initState();
@@ -79,17 +82,63 @@ class _UserHomeState extends State<UserHome> {
             children: [
               InkWell(
                 onTap: () {
-                  Center(
-                    child: Text(
-                      "Ability Used",
-                    ),
-                  );
+                  setState(() {
+                    _isAbilityUsed = !_isAbilityUsed;
+                  });
                 },
-                child: Image.network(
-                  widget.imageString,
-                  width: 400,
-                  height: 500,),  
-                )
+                child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                    // L'immagine che cambia
+                    _isAbilityUsed
+                        ? ColorFiltered(
+                            colorFilter: const ColorFilter.mode(
+                              Colors.black,
+                              BlendMode.saturation,
+                            ),
+                            child: Image.network(
+                              widget.imageString,
+                              width: 400,
+                              height: 500
+                            ),
+                          )
+                        : Image.network(
+                          widget.imageString,
+                          width: 400,
+                          height: 500,
+                        ),
+
+                    // Il testo che appare solo quando l'abilità è usata
+                    if (_isAbilityUsed)
+                       Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: Color(0xffeb7233),
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: Colors.white,
+                                width: 2,
+                              )
+                          ),
+                          child: const Text(
+                            'Ability Used',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              shadows: [
+                                Shadow(
+                                  color: Colors.black,
+                                  blurRadius: 2,
+                                  offset: Offset(1, 1),
+                                ),
+                              ],
+                            ),
+                          ),
+                       )
+                  ],
+                ),
+              ),  
             ],
           ),
 
