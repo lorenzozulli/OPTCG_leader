@@ -4,7 +4,7 @@ import 'package:optcgcounter_flutter/entities/leader.dart';
 class UserHome extends StatefulWidget{
   final Leader leader;
 
-  const UserHome ({super.key, required this.leader});
+  const UserHome ({super.key, required this.leader, required String String});
 
   @override
   State<UserHome> createState() => _UserHomeState();
