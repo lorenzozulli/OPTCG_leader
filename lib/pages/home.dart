@@ -3,8 +3,9 @@ import 'package:optcgcounter_flutter/entities/leader.dart';
 
 class UserHome extends StatefulWidget{
   final Leader leader;
+  final String imageString;
 
-  const UserHome ({super.key, required this.leader, required String String});
+  const UserHome ({super.key, required this.leader, required this.imageString});
 
   @override
   State<UserHome> createState() => _UserHomeState();
@@ -85,7 +86,7 @@ class _UserHomeState extends State<UserHome> {
                   );
                 },
                 child: Image.network(
-                  widget.leader.images.imageEn,
+                  widget.imageString,
                   width: 400,
                   height: 500,),  
                 )

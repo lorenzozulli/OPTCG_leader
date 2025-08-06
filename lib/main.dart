@@ -11,13 +11,14 @@ void main(){
     power: '5000',          // Provide default power
     colors: ['green','red'],        // Provide default colors
   );
-  runApp(MyApp(leader: defaultLeader, String: defaultLeader.images.imageEn));
+  runApp(MyApp(leader: defaultLeader, imageString: defaultLeader.images.imageEn,));
 }
 
 class MyApp extends StatefulWidget {
   final Leader leader;
+  final String imageString;
 
-  const MyApp({super.key, required this.leader, required String String});
+  const MyApp({super.key, required this.leader, required this.imageString});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -36,7 +37,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     // Initialize pages here, where widget.leader is available
     pages = [
-      UserHome(leader: widget.leader, String: widget.leader.images.imageEn), // Access leader via widget.leader
+      UserHome(leader: widget.leader, imageString: widget.imageString), // Access leader via widget.leader
       const LeaderSelection() // LeaderSelection doesn't seem to need a leader, so added const
     ];
   }

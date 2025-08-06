@@ -135,7 +135,7 @@ class Leaderdetails extends StatelessWidget {
                   InkWell(
                     onTap: (){
                       Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MyApp(leader: leader, String: leader.images.imageEn),
+                        MaterialPageRoute(builder: (context) => MyApp(leader: leader, imageString: leader.images.imageEn),
                         ),
                       );
                     },
@@ -172,7 +172,7 @@ class Leaderdetails extends StatelessWidget {
           InkWell(
             onTap: () {
                 Navigator.push(context,
-                MaterialPageRoute(builder: (context) => MyApp(leader: leader, String: leader.images.imagesAlt[index]),
+                MaterialPageRoute(builder: (context) => MyApp(leader: leader, imageString: leader.images.imagesAlt[index]),
                 ),
               );
             },
