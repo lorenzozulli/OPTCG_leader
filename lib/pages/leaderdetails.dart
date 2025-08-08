@@ -15,8 +15,13 @@ class Leaderdetails extends StatelessWidget {
       body: Stack(
         children: [
           SizedBox(
-            width: double.infinity,
-            child: Image.network(leader.images.imageEn),
+            child: Transform.scale(
+              scale: 1.11,
+              child: Transform.translate(
+                offset: const Offset(0.0, -90.0),
+                child: Image.network(leader.images.imageEn),
+              )
+            ),
           ),
           buttonArrow(context),
           scroll(),
