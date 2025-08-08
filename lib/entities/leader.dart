@@ -5,6 +5,7 @@ class Leader {
   final String life;
   final String power;
   final List<String> colors;
+  final String effect;
 
   const Leader({
     required this.name, 
@@ -12,7 +13,8 @@ class Leader {
     required this.images, 
     required this.life,
     required this.power,
-    required this.colors});
+    required this.colors,
+    required this.effect});
 
 factory Leader.fromJson(Map<dynamic, dynamic> json) {
     return Leader(
@@ -22,6 +24,7 @@ factory Leader.fromJson(Map<dynamic, dynamic> json) {
       life: json['life'] as String,
       power: json['power'] as String,
       colors: List<String>.from(json['colors'] as List),
+      effect: json['effect'] as String
     );
   }
 }

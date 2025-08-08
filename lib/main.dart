@@ -9,7 +9,8 @@ void main(){
     images: Images(imageEn: "https://en.onepiece-cardgame.com/images/cardlist/card/EB01-001.png?250701", imagesAlt: []), // Provide default images
     life: '4',           // Provide default life
     power: '5000',          // Provide default power
-    colors: ['green','red'],        // Provide default colors
+    colors: ['green','red'],
+    effect: ''        // Provide default colors
   );
   runApp(MyApp(leader: defaultLeader, imageString: defaultLeader.images.imageEn,));
 }

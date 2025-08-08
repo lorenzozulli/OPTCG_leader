@@ -137,7 +137,7 @@ class Leaderdetails extends StatelessWidget {
                     height: 10,
                   ),
                   Text(
-                    leader.id,
+                    leader.effect,
                   ),
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 15),
