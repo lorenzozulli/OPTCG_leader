@@ -99,12 +99,22 @@ class Leaderdetails extends StatelessWidget {
                   ),
                   Text(
                     leader.name,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 50,
+                      fontWeight: FontWeight.bold
+                      ),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
                   Text(
                     leader.id,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold
+                    ),
                   ),
                   const SizedBox(
                     height: 15,
@@ -118,6 +128,10 @@ class Leaderdetails extends StatelessWidget {
                   ),
                   Text(
                     "Effect",
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold
+                    ),
                   ),
                   const SizedBox(
                     height: 10,
@@ -132,7 +146,11 @@ class Leaderdetails extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "Alt Images",
+                    "Images",
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold
+                    ),
                   ),
                   const SizedBox(
                     height: 10,
@@ -147,7 +165,7 @@ class Leaderdetails extends StatelessWidget {
                     child: Image.network(
                       leader.images.imageEn,
                       width: 200,
-                      height: 500,
+                      height: 300,
                     )
                   ),
                   const SizedBox(
@@ -184,7 +202,7 @@ class Leaderdetails extends StatelessWidget {
             child: Image.network(
               leader.images.imagesAlt[index],
               width: 200,
-              height: 500,
+              height: 300,
             ),
           ),
         ],
