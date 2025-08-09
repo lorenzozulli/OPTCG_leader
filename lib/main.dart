@@ -73,7 +73,17 @@ class _MyAppState extends State<MyApp> {
           ),
 
           drawer: Drawer(
-            child: Text('OPTCGleader, made by Lorenzo Zulli')
+            child: Row(children: [
+                const SizedBox(
+                  height: 10,
+                  width: 100,
+                ),
+                ElevatedButton(
+                  onPressed: (){},
+                  child: Text('Reset'),
+                ),
+              ],
+            ),
           ),
         ),
       );

@@ -98,14 +98,14 @@ class _UserHomeState extends State<UserHome> {
                             ),
                             child: Image.network(
                               widget.imageString,
-                              width: 400,
-                              height: 500
+                              width: 600,
+                              height: 800
                             ),
                           )
                         : Image.network(
                           widget.imageString,
-                          width: 400,
-                          height: 500,
+                          width: 600,
+                          height: 800
                         ),
 
                     // Il testo che appare solo quando l'abilità è usata
