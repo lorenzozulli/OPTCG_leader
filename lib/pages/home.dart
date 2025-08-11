@@ -75,7 +75,7 @@ class _UserHomeState extends State<UserHome> {
             ],
           ),
 
-          Row(
+          Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.end,
 
@@ -99,13 +99,13 @@ class _UserHomeState extends State<UserHome> {
                             child: Image.network(
                               widget.imageString,
                               width: 600,
-                              height: 800
+                              height: 400
                             ),
                           )
                         : Image.network(
                           widget.imageString,
                           width: 600,
-                          height: 800
+                          height: 400,
                         ),
 
                     // Il testo che appare solo quando l'abilità è usata
@@ -138,7 +138,8 @@ class _UserHomeState extends State<UserHome> {
                        )
                   ],
                 ),
-              ),  
+              ),
+              Text(widget.leader.effect)
             ],
           ),
 
