@@ -30,7 +30,7 @@ class Leaderdetails extends StatelessWidget {
     ));
   }
 
-  buttonArrow(BuildContext context) {
+  Padding buttonArrow(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: InkWell(
@@ -64,7 +64,7 @@ class Leaderdetails extends StatelessWidget {
     );
   }
 
-  scroll() {
+  DraggableScrollableSheet scroll() {
     return DraggableScrollableSheet(
         initialChildSize: 0.6,
         maxChildSize: 1.0,
@@ -184,7 +184,7 @@ class Leaderdetails extends StatelessWidget {
         });
   }
 
-  altLeaders(BuildContext context, index) {
+  Padding altLeaders(BuildContext context, index) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Row(
