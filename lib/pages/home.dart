@@ -108,7 +108,6 @@ class _UserHomeState extends State<UserHome> {
                           height: 400,
                         ),
 
-                    // Il testo che appare solo quando l'abilità è usata
                     if (_isAbilityUsed)
                        Container(
                           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),

@@ -4,13 +4,13 @@ import 'package:optcgcounter_flutter/pages/home.dart';
 import 'package:optcgcounter_flutter/pages/leaderselection.dart';
 void main(){
   final Leader defaultLeader = Leader(
-    name: 'Kozuki Oden', // Provide a default name
-    id: 'EB01-001',       // Provide a default ID
-    images: Images(imageEn: "https://en.onepiece-cardgame.com/images/cardlist/card/EB01-001.png?250701", imagesAlt: []), // Provide default images
-    life: '4',           // Provide default life
-    power: '5000',          // Provide default power
+    name: 'Kozuki Oden',
+    id: 'EB01-001',
+    images: Images(imageEn: "https://en.onepiece-cardgame.com/images/cardlist/card/EB01-001.png?250701", imagesAlt: []),
+    life: '4',
+    power: '5000',
     colors: ['green','red'],
-    effect: ''        // Provide default colors
+    effect: ''
   );
   runApp(MyApp(leader: defaultLeader, imageString: defaultLeader.images.imageEn,));
 }
@@ -30,16 +30,14 @@ class _MyAppState extends State<MyApp> {
 
   int pageIndex = 0;
 
-    // Lazily initialize pages or pass widget.leader correctly
   late final List<Widget> pages;
 
   @override
   void initState() {
     super.initState();
-    // Initialize pages here, where widget.leader is available
     pages = [
-      UserHome(leader: widget.leader, imageString: widget.imageString), // Access leader via widget.leader
-      const LeaderSelection() // LeaderSelection doesn't seem to need a leader, so added const
+      UserHome(leader: widget.leader, imageString: widget.imageString),
+      const LeaderSelection()
     ];
   }
   
