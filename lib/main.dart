@@ -45,8 +45,6 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('OPTCGcounter')),
 
           body: pages[pageIndex],
 
@@ -68,20 +66,6 @@ class _MyAppState extends State<MyApp> {
                 label: 'Leaders',
               )
             ]
-          ),
-
-          drawer: Drawer(
-            child: Row(children: [
-                const SizedBox(
-                  height: 10,
-                  width: 100,
-                ),
-                ElevatedButton(
-                  onPressed: (){},
-                  child: Text('Reset'),
-                ),
-              ],
-            ),
           ),
         ),
       );

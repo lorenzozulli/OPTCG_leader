@@ -43,21 +43,28 @@ class _UserHomeState extends State<UserHome> {
 
   bool _isAbilityUsed = false;
 
+  void resetLeader(){
+    setState(() {
+      life = int.parse(widget.leader.life);
+      power = 0; 
+    });
+  }
+
+
 
   @override
   void initState(){
     super.initState();
-      try{
         life = int.parse(widget.leader.life);
-      } catch (e) {
-        print(e);
       }
-  }
 
     @override
     Widget build(BuildContext context){
       return MaterialApp(
         home: Scaffold(
+          
+        appBar: AppBar(
+          title: const Text('OPTCGcounter')),
 
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -153,6 +160,21 @@ class _UserHomeState extends State<UserHome> {
               ],
           ),
         ]
+      ),
+
+      
+      drawer: Drawer(
+        child: Row(children: [
+            const SizedBox(
+              height: 10,
+              width: 100,
+            ),
+            ElevatedButton(
+              onPressed: resetLeader,
+              child: Text('Reset'),
+            ),
+          ],
+        ),
       ),
     )
       );
