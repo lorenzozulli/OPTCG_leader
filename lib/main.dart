@@ -36,8 +36,8 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     pages = [
+      LeaderSelection(),
       UserHome(leader: widget.leader, imageString: widget.imageString),
-      const LeaderSelection()
     ];
   }
   
@@ -58,13 +58,14 @@ class _MyAppState extends State<MyApp> {
             type: BottomNavigationBarType.fixed,
             items: [
               BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: 'Home'),
-
-              BottomNavigationBarItem(
                 icon: Icon(Icons.person),
                 label: 'Leaders',
-              )
+              ),
+
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'Home',
+              ),
             ]
           ),
         ),

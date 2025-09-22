@@ -161,7 +161,6 @@ class _UserHomeState extends State<UserHome> {
         ]
       ),
 
-      
       drawer: Drawer(
         child: Row(children: [
             const SizedBox(
