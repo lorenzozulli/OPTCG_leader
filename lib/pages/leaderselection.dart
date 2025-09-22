@@ -66,46 +66,12 @@ class _LeaderSelectionState extends State<LeaderSelection> {
   Widget build(BuildContext context){
     return Column(
       children: [
-        SearchAnchor.bar(
-          searchController: _searchController,
-          barHintText: 'Search leaders...',
-          suggestionsBuilder: (context, controller) async {
-            final String query = controller.text.toLowerCase();
-            if (query.isEmpty) {
-              return _allLeaders.map((leader) { 
-                return ListTile(
-                  title: Text('${leader.name}, ${leader.id}'),
-                  onTap: () {
-                    controller.closeView('${leader.name}, ${leader.id}');
-                    _searchController.text = '${leader.name}, ${leader.id}';
-                    _onSearchChanged();
-                  },
-                );
-              }).toList();
-            } else {
-              final filteredSuggestions = _allLeaders.where((leader) {
-                return leader.name.toLowerCase().contains(query);
-              }).toList();
-
-              return filteredSuggestions.map((leader) {
-                return ListTile(
-                  title: Text('${leader.name}, ${leader.id}'),
-                  onTap: () {
-                    controller.closeView(leader.name);
-                    _searchController.text = leader.name;
-                    _onSearchChanged();
-                  },
-                );
-              }).toList();
-            }
-          },
-        ),
 
         Expanded(
           child: ListView.builder(
             itemBuilder: (context, index){
               if (_filteredLeaders.isEmpty) {
-                return const Center(child: Text("Nessun leader trovato."));
+                return const Center(child: Text("No Leader found."));
               }
               return Card(
                 child: InkWell(
@@ -159,6 +125,51 @@ class _LeaderSelectionState extends State<LeaderSelection> {
             itemCount: _filteredLeaders.length,
           ),
         ),
+
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SearchAnchor(
+              searchController: _searchController,
+              viewHintText: 'Search leaders...',
+
+              builder: (BuildContext context, SearchController controller) {
+              return SearchBar(
+                controller: controller,
+                hintText: 'Search leaders...',
+                onTap: () {
+                  controller.openView();
+                },
+                onChanged: (_) {
+                  controller.openView();
+                },
+              );
+            },
+              
+              suggestionsBuilder: (context, controller) async {
+                final String query = controller.text.toLowerCase();
+                if (query.isEmpty) {
+                  return List.empty();
+                } else {
+                  final filteredSuggestions = _allLeaders.where((leader) {
+                    return leader.name.toLowerCase().contains(query);
+                  }).toList();
+
+                  return filteredSuggestions.map((leader) {
+                    return ListTile(
+                      title: Text('${leader.name}, ${leader.id}'),
+                      onTap: () {
+                        controller.closeView(leader.name);
+                        _searchController.text = leader.name;
+                        _onSearchChanged();
+                      },
+                    );
+                  }).toList();
+                }
+              },
+            ),
+        
+        )
+        
       ],
     );
   }

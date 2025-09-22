@@ -145,7 +145,6 @@ class _UserHomeState extends State<UserHome> {
                   ],
                 ),
               ),
-              Text(widget.leader.effect)
             ],
           ),
 
