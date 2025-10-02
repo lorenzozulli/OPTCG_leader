@@ -66,7 +66,6 @@ class _LeaderSelectionState extends State<LeaderSelection> {
   Widget build(BuildContext context){
     return Column(
       children: [
-
         Expanded(
           child: ListView.builder(
             itemBuilder: (context, index){

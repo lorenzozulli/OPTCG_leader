@@ -3,28 +3,51 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:optcgcounter_flutter/entities/leader.dart';
 import 'package:optcgcounter_flutter/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class Leaderdetails extends StatelessWidget {
+
+class Leaderdetails extends StatefulWidget{
   final Leader leader;
   const Leaderdetails({super.key, required this.leader});
 
   @override
+  State<Leaderdetails> createState() => _LeaderDetailsState();
+  
+}
+
+class _LeaderDetailsState extends State<Leaderdetails>{
+
+  Future<void> _completeOnBoarding(String imagetype) async{
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isFirstTime', false);
+    await prefs.setString('imageString', imagetype);
+
+    if(mounted){
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => 
+          MyApp(isFirstTime: false, leader: widget.leader, imageString: imagetype),
+        ),
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-      body: Stack(
-        children: [
-          SizedBox(
-            child: Transform.scale(
-              scale: 1.11,
-              child: Transform.translate(
-                offset: const Offset(0.0, -90.0),
-                child: Image.network(leader.images.imageEn),
-              )
+      child: Scaffold(
+        body: Stack(
+          children: [
+            SizedBox(
+              child: Transform.scale(
+                scale: 1.11,
+                child: Transform.translate(
+                  offset: const Offset(0.0, -90.0),
+                  child: Image.network(widget.leader.images.imageEn),
+                )
+              ),
             ),
-          ),
-          buttonArrow(context),
-          scroll(),
+            buttonArrow(context),
+            scroll(),
         ],
       ),
     ));
@@ -98,10 +121,10 @@ class Leaderdetails extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    leader.name,
+                    widget.leader.name,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 50,
+                      fontSize: 30,
                       fontWeight: FontWeight.bold
                       ),
                   ),
@@ -109,7 +132,7 @@ class Leaderdetails extends StatelessWidget {
                     height: 10,
                   ),
                   Text(
-                    leader.id,
+                    widget.leader.id,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 25,
@@ -137,7 +160,7 @@ class Leaderdetails extends StatelessWidget {
                     height: 10,
                   ),
                   Text(
-                    leader.effect,
+                    widget.leader.effect,
                   ),
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 15),
@@ -157,13 +180,10 @@ class Leaderdetails extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: (){
-                      Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MyApp(leader: leader, imageString: leader.images.imageEn),
-                        ),
-                      );
+                      _completeOnBoarding(widget.leader.images.imageEn);
                     },
                     child: Image.network(
-                      leader.images.imageEn,
+                      widget.leader.images.imageEn,
                       width: 200,
                       height: 300,
                     )
@@ -174,7 +194,7 @@ class Leaderdetails extends StatelessWidget {
                   ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: leader.images.imagesAlt.length,
+                    itemCount: widget.leader.images.imagesAlt.length,
                     itemBuilder: (context, index) => altLeaders(context, index),
                   ),
                 ],
@@ -194,13 +214,10 @@ class Leaderdetails extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
-                Navigator.push(context,
-                MaterialPageRoute(builder: (context) => MyApp(leader: leader, imageString: leader.images.imagesAlt[index]),
-                ),
-              );
+              _completeOnBoarding(widget.leader.images.imagesAlt[index]);
             },
             child: Image.network(
-              leader.images.imagesAlt[index],
+              widget.leader.images.imagesAlt[index],
               width: 200,
               height: 300,
             ),
@@ -209,5 +226,4 @@ class Leaderdetails extends StatelessWidget {
       ),
     );
   }
-
 }

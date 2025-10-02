@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:optcgcounter_flutter/entities/leader.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserHome extends StatefulWidget{
   final Leader leader;
@@ -57,12 +58,13 @@ class _UserHomeState extends State<UserHome> {
     });
   }
 
-
+  late String _leaderName;
 
   @override
   void initState(){
     super.initState();
         life = int.parse(widget.leader.life);
+        _leaderName = widget.leader.name;
       }
 
     @override
@@ -71,7 +73,7 @@ class _UserHomeState extends State<UserHome> {
         home: Scaffold(
           
         appBar: AppBar(
-          title: const Text('OPTCGcounter')),
+          title: Text(_leaderName)),
 
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
