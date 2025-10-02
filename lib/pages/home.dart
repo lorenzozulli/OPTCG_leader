@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:optcgcounter_flutter/entities/leader.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class UserHome extends StatefulWidget{
   final Leader leader;
