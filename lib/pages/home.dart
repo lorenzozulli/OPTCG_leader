@@ -14,16 +14,23 @@ class UserHome extends StatefulWidget{
 class _UserHomeState extends State<UserHome> {
   
   int power = 0;
+  String lint = '';
 
   void increasePower(){
     setState(() {
       power = power+1000;
+      if(power>0){
+        lint = '+';
+      }
     });
   }
 
   void decreasePower(){
     setState(() {
       power = power-1000;
+      if(power<=0){
+        lint = '';
+      }
     });
   }
 
@@ -77,7 +84,7 @@ class _UserHomeState extends State<UserHome> {
 
             children: <Widget>[
               ElevatedButton(onPressed: decreasePower, child: const Text('-')),
-              Text('$power'),
+              Text('$lint$power'),
               ElevatedButton(onPressed: increasePower, child: const Text('+'))
             ],
           ),
