@@ -16,7 +16,7 @@ class Leader {
     required this.colors,
     required this.effect});
 
-factory Leader.fromJson(Map<dynamic, dynamic> json) {
+  factory Leader.fromJson(Map<dynamic, dynamic> json) {
     return Leader(
       name: json['name'] as String,
       id: json['id'] as String,
