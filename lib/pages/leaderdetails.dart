@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:optcgcounter_flutter/entities/leader.dart';
 import 'package:optcgcounter_flutter/main.dart';
+import 'package:optcgcounter_flutter/pages/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -12,7 +14,6 @@ class Leaderdetails extends StatefulWidget{
 
   @override
   State<Leaderdetails> createState() => _LeaderDetailsState();
-  
 }
 
 class _LeaderDetailsState extends State<Leaderdetails>{
@@ -20,12 +21,15 @@ class _LeaderDetailsState extends State<Leaderdetails>{
   Future<void> _completeOnBoarding(String imagetype) async{
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isFirstTime', false);
-    await prefs.setString('imageString', imagetype);
+
+    widget.leader.saveLeader(widget.leader);
+
+    await prefs.setString('leaderImage', imagetype);
 
     if(mounted){
       Navigator.of(context).push(
         MaterialPageRoute(builder: (context) => 
-          MyApp(isFirstTime: false, leader: widget.leader, imageString: imagetype),
+          MyApp(isFirstTime: false, leader: widget.leader, leaderImage: imagetype),
         ),
       );
     }

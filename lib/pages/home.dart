@@ -3,16 +3,15 @@ import 'package:optcgcounter_flutter/entities/leader.dart';
 
 class UserHome extends StatefulWidget{
   final Leader leader;
-  final String imageString;
+  final String leaderImage;
 
-  const UserHome ({super.key, required this.leader, required this.imageString});
+  const UserHome ({super.key, required this.leader, required this.leaderImage});
 
   @override
   State<UserHome> createState() => _UserHomeState();
 }
 
 class _UserHomeState extends State<UserHome> {
-  
   int power = 0;
   String lint = '';
 
@@ -112,13 +111,13 @@ class _UserHomeState extends State<UserHome> {
                               BlendMode.saturation,
                             ),
                             child: Image.network(
-                              widget.imageString,
+                              widget.leaderImage,
                               width: 600,
                               height: 400
                             ),
                           )
                         : Image.network(
-                          widget.imageString,
+                          widget.leaderImage,
                           width: 600,
                           height: 400,
                         ),

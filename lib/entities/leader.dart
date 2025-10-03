@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:shared_preferences/shared_preferences.dart';
+
 class Leader {
   final String name;
   final String id;
@@ -27,6 +31,41 @@ class Leader {
       effect: json['effect'] as String
     );
   }
+
+  Map<String, dynamic> toJson(){
+    return{
+      'name': name,
+      'id': id,
+      'images': images.toJson(),
+      'life': life,
+      'power': power,
+      'colors': colors,
+      'effect': effect
+    };
+  }
+
+  Future<void> saveLeader(Leader leader) async {
+    final prefs = await SharedPreferences.getInstance();
+    Map<String, dynamic> leaderMap = leader.toJson();
+    String leaderJson = jsonEncode(leaderMap);
+    await prefs.setString('leader', leaderJson);
+    print(leaderJson);
+  }
+
+  Future<Leader?> loadLeader() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? leaderJson = prefs.getString('leader');
+
+    if(leaderJson == null){
+      return null;
+    }
+
+    Map<String, dynamic> leaderMap = jsonDecode(leaderJson);
+    Leader leader = Leader.fromJson(leaderMap);
+    print(leader);
+
+    return leader;
+  }
 }
 
 class Images{
@@ -43,5 +82,12 @@ class Images{
       imageEn: json['image_en'] as String,
       imagesAlt: List<String>.from(json['images_alt'] as List),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'image_en': imageEn,
+      'images_alt': imagesAlt,
+    };
   }
 }
