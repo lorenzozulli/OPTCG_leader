@@ -1,10 +1,8 @@
-import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:optcgcounter_flutter/entities/leader.dart';
 import 'package:optcgcounter_flutter/main.dart';
-import 'package:optcgcounter_flutter/pages/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
