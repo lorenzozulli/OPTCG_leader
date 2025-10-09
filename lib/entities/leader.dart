@@ -49,7 +49,6 @@ class Leader {
     Map<String, dynamic> leaderMap = leader.toJson();
     String leaderJson = jsonEncode(leaderMap);
     await prefs.setString('leader', leaderJson);
-    print(leaderJson);
   }
 
   Future<Leader?> loadLeader() async {
@@ -62,7 +61,6 @@ class Leader {
 
     Map<String, dynamic> leaderMap = jsonDecode(leaderJson);
     Leader leader = Leader.fromJson(leaderMap);
-    print(leader);
 
     return leader;
   }

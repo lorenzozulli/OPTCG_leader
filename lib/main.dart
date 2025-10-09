@@ -6,41 +6,33 @@ import 'package:optcgcounter_flutter/pages/home.dart';
 import 'package:optcgcounter_flutter/pages/leaderselection.dart';
 import 'package:shared_preferences/shared_preferences.dart';
  void main() async {
-  final Leader defaultLeader = Leader(
-    name: 'adsf',
-    id: 'asdf',
-    images: Images(imageEn: 'asdf', imagesAlt: ['asdf']),
-    life: '3',
-    power: 'asdf',
-    colors: ['asdf'],
-    effect: 'asdf:'
-  );
   WidgetsFlutterBinding.ensureInitialized();
 
   final SharedPreferences prefs = await SharedPreferences.getInstance();
 
   final bool isFirstTime = prefs.getBool('isFirstTime') ?? true;
-
   final String leaderImage = prefs.getString('leaderImage') ?? '';
-
   final String leaderJson = prefs.getString('leader') ?? '';
+  final bool isNewLeader = prefs.getBool('isNewLeader') ?? false;
 
   Map<String, dynamic> leaderMap = jsonDecode(leaderJson);
   Leader leader = Leader.fromJson(leaderMap);
 
-  runApp(MyApp(isFirstTime: isFirstTime, leader: leader, leaderImage: leaderImage));
+  runApp(MyApp(isFirstTime: isFirstTime, leader: leader, leaderImage: leaderImage, isNewLeader: isNewLeader));
 } 
 
 class MyApp extends StatefulWidget {
   final Leader leader;
   final String leaderImage;
   final bool isFirstTime;
+  final bool isNewLeader;
 
   const MyApp({
     super.key,
     required this.isFirstTime,
     required this.leader,
-    required this.leaderImage
+    required this.leaderImage,
+    required this.isNewLeader
   });
 
   @override
@@ -55,7 +47,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     pages = [
-      UserHome(leader: widget.leader, leaderImage: widget.leaderImage),
+      UserHome(leader: widget.leader, leaderImage: widget.leaderImage, isNewLeader: widget.isNewLeader),
       LeaderSelection(),
     ];
   }

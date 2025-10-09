@@ -20,16 +20,16 @@ class _LeaderDetailsState extends State<Leaderdetails>{
 
   Future<void> _completeOnBoarding(String imagetype) async{
     final prefs = await SharedPreferences.getInstance();
+    
     await prefs.setBool('isFirstTime', false);
-
     widget.leader.saveLeader(widget.leader);
-
     await prefs.setString('leaderImage', imagetype);
+    await prefs.setBool('isNewLeader', true);
 
     if(mounted){
       Navigator.of(context).push(
         MaterialPageRoute(builder: (context) => 
-          MyApp(isFirstTime: false, leader: widget.leader, leaderImage: imagetype),
+          MyApp(isFirstTime: false, leader: widget.leader, leaderImage: imagetype, isNewLeader: true,),
         ),
       );
     }
