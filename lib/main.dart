@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:optcgcounter_flutter/entities/leader.dart';
 import 'package:optcgcounter_flutter/pages/home.dart';
 import 'package:optcgcounter_flutter/pages/leaderselection.dart';
+import 'package:optcgcounter_flutter/utils/themes/yellow_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 
  void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -61,6 +63,8 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: AppTheme.light,
+      //darkTheme: AppTheme.dark,
       home: widget.isFirstTime ? LeaderSelection() : Scaffold(
         body: pages[pageIndex],
         bottomNavigationBar: BottomNavigationBar(

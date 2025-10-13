@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:optcgcounter_flutter/entities/leader.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,6 +22,7 @@ class UserHome extends StatefulWidget{
 class _UserHomeState extends State<UserHome> {
   late int power;
   late String leaderName;
+  late String leaderId;
   late int life;
   late String leaderColors;
   bool isAbilityUsed = false;
@@ -105,6 +108,8 @@ class _UserHomeState extends State<UserHome> {
     super.initState();
     _initializeLeaderState();
     leaderName = widget.leader.name;
+    leaderId = widget.leader.id;
+    
     if(widget.leader.colors.length == 1){
       leaderColors = widget.leader.colors[0];
     } else {
@@ -118,7 +123,7 @@ class _UserHomeState extends State<UserHome> {
       home: Scaffold(
         appBar: AppBar(
           title: Text(
-            leaderName,
+            "$leaderName - ($leaderId)",
             style: TextStyle(
               fontWeight: FontWeight.bold
             )
@@ -131,8 +136,14 @@ class _UserHomeState extends State<UserHome> {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage('assets/backgrounds/$leaderColors.png'),
-                  fit: BoxFit.cover, // Copre l'intera area
+                  fit: BoxFit.cover,
                 ),
+              ),
+            ),
+            BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+              child: Container(
+                color: Colors.black.withValues(alpha: 0.1), 
               ),
             ),
             Column(
@@ -165,7 +176,7 @@ class _UserHomeState extends State<UserHome> {
                           isAbilityUsed ? ColorFiltered(
                             colorFilter: const ColorFilter.mode(
                               Colors.black,
-                              BlendMode.overlay,
+                              BlendMode.color,
                             ),
                             child: Image.network(
                               widget.leaderImage,
