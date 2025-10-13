@@ -106,106 +106,108 @@ class _LeaderDetailsState extends State<Leaderdetails>{
             color: Colors.white,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20),
-              topRight: Radius.circular(20)),
+              topRight: Radius.circular(20)
             ),
-            child: SingleChildScrollView(
-              controller: scrollController,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10, bottom: 25),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          height: 5,
-                          width: 35,
-                          color: Colors.black12,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Text(
-                    widget.leader.name,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold
+          ),
+          child: SingleChildScrollView(
+            controller: scrollController,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 10, bottom: 25),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: 5,
+                        width: 35,
+                        color: Colors.black12,
                       ),
+                    ],
                   ),
-                  const SizedBox(
-                    height: 10,
+                ),
+                Text(
+                  widget.leader.name,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold
                   ),
-                  Text(
-                    widget.leader.id,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold
-                    ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  widget.leader.id,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold
                   ),
-                  const SizedBox(
-                    height: 15,
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 15),
+                  child: Divider(
+                    height: 4,
                   ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 15),
-                    child: Divider(
-                      height: 4,
-                    ),
+                ),
+                Text(
+                  "Effect",
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold
                   ),
-                  Text(
-                    "Effect",
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold
-                    ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  widget.leader.effect,
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 15),
+                  child: Divider(
+                    height: 4,
                   ),
-                  const SizedBox(
-                    height: 10,
+                ),
+                Text(
+                  "Images",
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold
                   ),
-                  Text(
-                    widget.leader.effect,
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 15),
-                    child: Divider(
-                      height: 4,
-                    ),
-                  ),
-                  Text(
-                    "Images",
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  InkWell(
-                    onTap: (){
-                      _completeOnBoarding(widget.leader.images.imageEn);
-                    },
-                    child: Image.network(
-                      widget.leader.images.imageEn,
-                      height: 300,
-                    )
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: widget.leader.images.imagesAlt.length,
-                    itemBuilder: (context, index) => altLeaders(context, index),
-                  ),
-                ],
-              ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                InkWell(
+                  onTap: (){
+                    _completeOnBoarding(widget.leader.images.imageEn);
+                  },
+                  child: Image.network(
+                    widget.leader.images.imageEn,
+                    height: 300,
+                  )
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: widget.leader.images.imagesAlt.length,
+                  itemBuilder: (context, index) => altLeaders(context, index)
+                ),
+              ],
             ),
-          );
-        });
+          ),
+        );
+      }
+    );
   }
 
   Padding altLeaders(BuildContext context, index) {
