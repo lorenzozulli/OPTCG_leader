@@ -2,6 +2,12 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:optcgcounter_flutter/entities/leader.dart';
+import 'package:optcgcounter_flutter/utils/themes/black_theme.dart';
+import 'package:optcgcounter_flutter/utils/themes/blue_theme.dart';
+import 'package:optcgcounter_flutter/utils/themes/green_theme.dart';
+import 'package:optcgcounter_flutter/utils/themes/purple_theme.dart';
+import 'package:optcgcounter_flutter/utils/themes/red_theme.dart';
+import 'package:optcgcounter_flutter/utils/themes/yellow_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserHome extends StatefulWidget{
@@ -101,6 +107,26 @@ class _UserHomeState extends State<UserHome> {
       life = int.parse(widget.leader.life);
       power = 0; 
     });
+  }
+
+  void themeSwitcher(bool light){
+    Map<String, ThemeData> themeMap = {
+      if(light){
+        'red': RedTheme.light,
+        'green': GreenTheme.light,
+        'blue': BlueTheme.light,
+        'purple': PurpleTheme.light,
+        'black': BlackTheme.light,
+        'yellow': YellowTheme.light
+      } else {
+        'red': RedTheme.dark,
+        'green': GreenTheme.dark,
+        'blue': BlueTheme.dark,
+        'purple': PurpleTheme.dark,
+        'black': BlackTheme.dark,
+        'yellow': YellowTheme.dark
+      }
+    } as Map<String, ThemeData>;
   }
 
   @override
