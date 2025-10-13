@@ -21,6 +21,7 @@ class _UserHomeState extends State<UserHome> {
   late int power;
   late String leaderName;
   late int life;
+  late String leaderColors;
   bool isAbilityUsed = false;
   String lint = '';
 
@@ -104,6 +105,11 @@ class _UserHomeState extends State<UserHome> {
     super.initState();
     _initializeLeaderState();
     leaderName = widget.leader.name;
+    if(widget.leader.colors.length == 1){
+      leaderColors = widget.leader.colors[0];
+    } else {
+      leaderColors = "${widget.leader.colors[0]}_${widget.leader.colors[1]}";
+    }
   }
 
   @override
@@ -118,93 +124,107 @@ class _UserHomeState extends State<UserHome> {
             )
           )
         ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.end,
+        backgroundColor: Colors.transparent,
+        body: Stack(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: <Widget>[
-                ElevatedButton(onPressed: decreasePower, child: const Text('-')),
-                Text('$lint$power'),
-                ElevatedButton(onPressed: increasePower, child: const Text('+'))
-              ],
+            Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/backgrounds/$leaderColors.png'),
+                  fit: BoxFit.cover, // Copre l'intera area
+                ),
+              ),
             ),
-
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      isAbilityUsed = !isAbilityUsed;
-                    });
-                  },
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      isAbilityUsed ? ColorFiltered(
-                        colorFilter: const ColorFilter.mode(
-                          Colors.black,
-                          BlendMode.overlay,
-                        ),
-                        child: Image.network(
-                          widget.leaderImage,
-                          width: 600,
-                          height: 400
-                        ),
-                      )
-                      : Image.network(
-                          widget.leaderImage,
-                          width: 600,
-                          height: 400,
-                        ),
-
-                      if (isAbilityUsed)
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                          decoration: BoxDecoration(
-                            color: Color(0xffeb7233),
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(
-                              color: Colors.white,
-                              width: 2,
-                            )
-                          ),
-                          child: const Text('Ability Used',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              shadows: [
-                                Shadow(
-                                  color: Colors.black,
-                                  blurRadius: 2,
-                                  offset: Offset(1, 1),
-                                ),
-                              ],
-                            ),
-                          ),
-                        )
-                    ],
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    ElevatedButton(onPressed: decreasePower, child: const Text('-')),
+                    Text('$lint$power'),
+                    ElevatedButton(onPressed: increasePower, child: const Text('+'))
+                  ],
                 ),
-              ],
-            ),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.end,
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          isAbilityUsed = !isAbilityUsed;
+                        });
+                      },
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          isAbilityUsed ? ColorFiltered(
+                            colorFilter: const ColorFilter.mode(
+                              Colors.black,
+                              BlendMode.overlay,
+                            ),
+                            child: Image.network(
+                              widget.leaderImage,
+                              width: 600,
+                              height: 400
+                            ),
+                          )
+                          : Image.network(
+                              widget.leaderImage,
+                              width: 600,
+                              height: 400,
+                            ),
 
-              children: <Widget>[
-                ElevatedButton(onPressed: decreaseLife, child: const Text('-')),
-                Text('$life'),
-                ElevatedButton(onPressed: increaseLife, child: const Text('+'))
-              ],
+                          if (isAbilityUsed)
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              decoration: BoxDecoration(
+                                color: Color(0xffeb7233),
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                  color: Colors.white,
+                                  width: 2,
+                                )
+                              ),
+                              child: const Text('Ability Used',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  shadows: [
+                                    Shadow(
+                                      color: Colors.black,
+                                      blurRadius: 2,
+                                      offset: Offset(1, 1),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+
+                  children: <Widget>[
+                    ElevatedButton(onPressed: decreaseLife, child: const Text('-')),
+                    Text('$life'),
+                    ElevatedButton(onPressed: increaseLife, child: const Text('+'))
+                  ],
+                ),
+              ]
             ),
-          ]
+            
+          ],
         ),
 
         drawer: Drawer(
