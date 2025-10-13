@@ -1,10 +1,8 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:optcgcounter_flutter/entities/leader.dart';
 import 'package:optcgcounter_flutter/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 
 class Leaderdetails extends StatefulWidget{
   final Leader leader;
@@ -20,14 +18,19 @@ class _LeaderDetailsState extends State<Leaderdetails>{
     final prefs = await SharedPreferences.getInstance();
     
     await prefs.setBool('isFirstTime', false);
-    widget.leader.saveLeader(widget.leader);
+    widget.leader.setSavedLeader(widget.leader);
     await prefs.setString('leaderImage', imagetype);
     await prefs.setBool('isNewLeader', true);
 
     if(mounted){
       Navigator.of(context).push(
         MaterialPageRoute(builder: (context) => 
-          MyApp(isFirstTime: false, leader: widget.leader, leaderImage: imagetype, isNewLeader: true,),
+          MyApp(
+            isFirstTime: false, 
+            leader: widget.leader, 
+            leaderImage: imagetype, 
+            isNewLeader: true,
+          ),
         ),
       );
     }
@@ -50,9 +53,10 @@ class _LeaderDetailsState extends State<Leaderdetails>{
             ),
             buttonArrow(context),
             scroll(),
-        ],
-      ),
-    ));
+          ],
+        ),
+      )
+    );
   }
 
   Padding buttonArrow(BuildContext context) {
@@ -91,18 +95,18 @@ class _LeaderDetailsState extends State<Leaderdetails>{
 
   DraggableScrollableSheet scroll() {
     return DraggableScrollableSheet(
-        initialChildSize: 0.6,
-        maxChildSize: 1.0,
-        minChildSize: 0.6,
-        builder: (context, scrollController) {
-          return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            clipBehavior: Clip.hardEdge,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20)),
+      initialChildSize: 0.6,
+      maxChildSize: 1.0,
+      minChildSize: 0.6,
+      builder: (context, scrollController) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          clipBehavior: Clip.hardEdge,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20)),
             ),
             child: SingleChildScrollView(
               controller: scrollController,
@@ -144,7 +148,6 @@ class _LeaderDetailsState extends State<Leaderdetails>{
                   const SizedBox(
                     height: 15,
                   ),
-                  
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 15),
                     child: Divider(
@@ -186,7 +189,6 @@ class _LeaderDetailsState extends State<Leaderdetails>{
                     },
                     child: Image.network(
                       widget.leader.images.imageEn,
-                      width: 200,
                       height: 300,
                     )
                   ),
@@ -208,7 +210,7 @@ class _LeaderDetailsState extends State<Leaderdetails>{
 
   Padding altLeaders(BuildContext context, index) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 20),
       child: Row(
         children: [
           const SizedBox(
@@ -220,7 +222,6 @@ class _LeaderDetailsState extends State<Leaderdetails>{
             },
             child: Image.network(
               widget.leader.images.imagesAlt[index],
-              width: 200,
               height: 300,
             ),
           ),

@@ -1,0 +1,1 @@
+https://raw.githubusercontent.com/lorenzozulli/optcg_leaders_list/refs/heads/main/leaders.json

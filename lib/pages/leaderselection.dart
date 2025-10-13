@@ -1,9 +1,10 @@
 import 'dart:convert';
-
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:optcgcounter_flutter/entities/leader.dart';
 import 'package:optcgcounter_flutter/pages/leaderdetails.dart';
+import 'package:path_provider/path_provider.dart';
 
 class LeaderSelection extends StatefulWidget {
   const LeaderSelection ({super.key});
@@ -13,12 +14,23 @@ class LeaderSelection extends StatefulWidget {
 }
 
 class _LeaderSelectionState extends State<LeaderSelection> {
-  final List<Leader> _allLeaders = <Leader>[]; // Lista di tutte le carte
-  List<Leader> _filteredLeaders = <Leader>[]; // Lista delle carte attualmente visualizzate (filtrate)
+  final List<Leader> _allLeaders = <Leader>[];
   final SearchController _searchController = SearchController();
+  List<Leader> _filteredLeaders = <Leader>[];
+
+  Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
+    return directory.path;
+  }
+
+  Future<File> get _localFile async {
+    final path = await _localPath;
+    return File('$path/optcgcounter_flutter/optcgcounter_flutter/assets/url.txt');
+  }
 
   Future<List<Leader>> fetchLeaders() async {
-    String url = "https://raw.githubusercontent.com/lorenzozulli/optcg_leaders_list/refs/heads/main/leaders.json";
+    final file = await _localFile;
+    String url = await file.readAsString();
     var response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
@@ -69,18 +81,19 @@ class _LeaderSelectionState extends State<LeaderSelection> {
         Expanded(
           child: ListView.builder(
             itemBuilder: (context, index){
-              if (_filteredLeaders.isEmpty) {
-                return const Center(child: Text("No Leader found."));
-              }
+              if (_filteredLeaders.isEmpty) return const Center(child: Text("No Leader found."));
+
               return Card(
+                elevation: 10,
+                clipBehavior: Clip.hardEdge,
                 child: InkWell(
                   onTap:() {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Leaderdetails(leader: _filteredLeaders[index]),
+                        MaterialPageRoute(
+                          builder: (context) => Leaderdetails(leader: _filteredLeaders[index]),
                       ),
                     );
                   },
-
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Row(
@@ -97,7 +110,7 @@ class _LeaderSelectionState extends State<LeaderSelection> {
                             Text(
                               _filteredLeaders[index].name,
                               style: const TextStyle(
-                                fontSize: 22,
+                                overflow: TextOverflow.ellipsis,
                                 fontWeight: FontWeight.bold
                               )
                             ),
@@ -106,6 +119,12 @@ class _LeaderSelectionState extends State<LeaderSelection> {
                               style: TextStyle(
                                 color: Colors.grey.shade700
                               ),
+                            ),
+                            Text(
+                              _filteredLeaders[index].power,
+                              style: TextStyle(
+                                color: Colors.grey.shade700
+                              ), 
                             ),
                             Text(
                               "(${_filteredLeaders[index].life}) LIFE",
@@ -119,7 +138,7 @@ class _LeaderSelectionState extends State<LeaderSelection> {
                     )
                   ),
                 )
-                );
+              );
             },
             itemCount: _filteredLeaders.length,
           ),
@@ -144,31 +163,29 @@ class _LeaderSelectionState extends State<LeaderSelection> {
               );
             },
               
-              suggestionsBuilder: (context, controller) async {
-                final String query = controller.text.toLowerCase();
-                if (query.isEmpty) {
-                  return List.empty();
-                } else {
-                  final filteredSuggestions = _allLeaders.where((leader) {
-                    return leader.name.toLowerCase().contains(query);
-                  }).toList();
+            suggestionsBuilder: (context, controller) async {
+              final String query = controller.text.toLowerCase();
+              if (query.isEmpty) {
+                return List.empty();
+              } else {
+                final filteredSuggestions = _allLeaders.where((leader) {
+                  return leader.name.toLowerCase().contains(query) || leader.id.toLowerCase().contains(query);
+                }).toList();
 
-                  return filteredSuggestions.map((leader) {
-                    return ListTile(
-                      title: Text('${leader.name}, ${leader.id}'),
-                      onTap: () {
-                        controller.closeView(leader.name);
-                        _searchController.text = leader.name;
-                        _onSearchChanged();
-                      },
-                    );
-                  }).toList();
-                }
-              },
-            ),
-        
+                return filteredSuggestions.map((leader) {
+                  return ListTile(
+                    title: Text('${leader.name}, ${leader.id}'),
+                    onTap: () {
+                      controller.closeView(leader.name);
+                      _searchController.text = leader.name;
+                      _onSearchChanged();
+                    },
+                  );
+                }).toList();
+              }
+            },
+          ),
         )
-        
       ],
     );
   }

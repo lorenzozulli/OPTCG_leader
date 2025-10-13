@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Leader {
@@ -18,7 +17,8 @@ class Leader {
     required this.life,
     required this.power,
     required this.colors,
-    required this.effect});
+    required this.effect
+  });
 
   factory Leader.fromJson(Map<dynamic, dynamic> json) {
     return Leader(
@@ -44,14 +44,14 @@ class Leader {
     };
   }
 
-  Future<void> saveLeader(Leader leader) async {
+  Future<void> setSavedLeader(Leader leader) async {
     final prefs = await SharedPreferences.getInstance();
     Map<String, dynamic> leaderMap = leader.toJson();
     String leaderJson = jsonEncode(leaderMap);
     await prefs.setString('leader', leaderJson);
   }
 
-  Future<Leader?> loadLeader() async {
+  Future<Leader?> getSavedLeader() async {
     final prefs = await SharedPreferences.getInstance();
     String? leaderJson = prefs.getString('leader');
 
