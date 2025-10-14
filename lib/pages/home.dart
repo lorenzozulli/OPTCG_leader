@@ -2,12 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:optcgcounter_flutter/entities/leader.dart';
-import 'package:optcgcounter_flutter/utils/themes/black_theme.dart';
-import 'package:optcgcounter_flutter/utils/themes/blue_theme.dart';
-import 'package:optcgcounter_flutter/utils/themes/green_theme.dart';
-import 'package:optcgcounter_flutter/utils/themes/purple_theme.dart';
-import 'package:optcgcounter_flutter/utils/themes/red_theme.dart';
-import 'package:optcgcounter_flutter/utils/themes/yellow_theme.dart';
+import 'package:optcgcounter_flutter/entities/themeswitcher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserHome extends StatefulWidget{
@@ -25,14 +20,20 @@ class UserHome extends StatefulWidget{
   State<UserHome> createState() => _UserHomeState();
 }
 
-class _UserHomeState extends State<UserHome> {
+class _UserHomeState extends State<UserHome> with SingleTickerProviderStateMixin {
   late int power;
   late String leaderName;
   late String leaderId;
   late int life;
   late String leaderColors;
+  late ThemeSwitcher themeSwitcher;
   bool isAbilityUsed = false;
   String lint = '';
+
+  double _xRotation = 0.0;
+  double _yRotation = 0.0;
+  final double _maxRotation = 0.4; // Limite massimo di rotazione
+  late final AnimationController _animationController;
 
   void increasePower(){
     setState(() {
@@ -52,7 +53,7 @@ class _UserHomeState extends State<UserHome> {
 
   void increaseLife(){
     setState(() {
-      life = life+1;
+      if(life<10)life = life+1;
       setLife(life);
     });
   }
@@ -106,27 +107,35 @@ class _UserHomeState extends State<UserHome> {
     setState(() {
       life = int.parse(widget.leader.life);
       power = 0; 
+
+      setPower(power);
+      setLife(life);
     });
   }
 
-  void themeSwitcher(bool light){
-    Map<String, ThemeData> themeMap = {
-      if(light){
-        'red': RedTheme.light,
-        'green': GreenTheme.light,
-        'blue': BlueTheme.light,
-        'purple': PurpleTheme.light,
-        'black': BlackTheme.light,
-        'yellow': YellowTheme.light
-      } else {
-        'red': RedTheme.dark,
-        'green': GreenTheme.dark,
-        'blue': BlueTheme.dark,
-        'purple': PurpleTheme.dark,
-        'black': BlackTheme.dark,
-        'yellow': YellowTheme.dark
-      }
-    } as Map<String, ThemeData>;
+  void _onPanUpdate(DragUpdateDetails details) {
+    const sensitivity = 0.005;
+    setState(() {
+      _xRotation += details.delta.dy * sensitivity;
+      _yRotation -= details.delta.dx * sensitivity;
+      _xRotation = _xRotation.clamp(-_maxRotation, _maxRotation);
+      _yRotation = _yRotation.clamp(-_maxRotation, _maxRotation);
+    });
+  }
+
+  void _onPanEnd(DragEndDetails details) {
+    final tweenX = Tween<double>(begin: _xRotation, end: 0.0);
+    final tweenY = Tween<double>(begin: _yRotation, end: 0.0);
+    final animation = CurvedAnimation(parent: _animationController, curve: Curves.easeOut);
+    
+    _animationController.addListener(() {
+      setState(() {
+        _xRotation = tweenX.evaluate(animation);
+        _yRotation = tweenY.evaluate(animation);
+      });
+    });
+    
+    _animationController.forward(from: 0.0);
   }
 
   @override
@@ -141,11 +150,25 @@ class _UserHomeState extends State<UserHome> {
     } else {
       leaderColors = "${widget.leader.colors[0]}_${widget.leader.colors[1]}";
     }
+
+    themeSwitcher = ThemeSwitcher(color: widget.leader.colors[0]);
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    );
+  }
+
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context){
     return MaterialApp(
+      theme: themeSwitcher.themeSwitcher(true, widget.leader.colors[0]),
+      darkTheme: themeSwitcher.themeSwitcher(false, widget.leader.colors[0]),
       home: Scaffold(
         appBar: AppBar(
           title: Text(
@@ -181,7 +204,12 @@ class _UserHomeState extends State<UserHome> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
                     ElevatedButton(onPressed: decreasePower, child: const Text('-')),
-                    Text('$lint$power'),
+                    Text(
+                      '$lint$power',
+                      style: TextStyle(
+                        fontSize: 30
+                      )
+                    ),
                     ElevatedButton(onPressed: increasePower, child: const Text('+'))
                   ],
                 ),
@@ -190,59 +218,68 @@ class _UserHomeState extends State<UserHome> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    InkWell(
+                    GestureDetector(
                       onTap: () {
                         setState(() {
                           isAbilityUsed = !isAbilityUsed;
                         });
                       },
-                      child: Stack(
+                      onPanUpdate: _onPanUpdate,
+                      onPanEnd: _onPanEnd,
+                      child: Transform(
+                        transform: Matrix4.identity()
+                        ..setEntry(3, 2, 0.001) // Prospettiva
+                        ..rotateX(_xRotation)
+                        ..rotateY(_yRotation),
                         alignment: Alignment.center,
-                        children: [
-                          isAbilityUsed ? ColorFiltered(
-                            colorFilter: const ColorFilter.mode(
-                              Colors.black,
-                              BlendMode.color,
-                            ),
-                            child: Image.network(
-                              widget.leaderImage,
-                              width: 600,
-                              height: 400
-                            ),
-                          )
-                          : Image.network(
-                              widget.leaderImage,
-                              width: 600,
-                              height: 400,
-                            ),
-
-                          if (isAbilityUsed)
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                              decoration: BoxDecoration(
-                                color: Color(0xffeb7233),
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(
-                                  color: Colors.white,
-                                  width: 2,
-                                )
+                        child: Stack(
+                        alignment: Alignment.center,
+                          children: [
+                            isAbilityUsed ? ColorFiltered(
+                              colorFilter: const ColorFilter.mode(
+                                Colors.transparent,
+                                BlendMode.color,
                               ),
-                              child: const Text('Ability Used',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  shadows: [
-                                    Shadow(
-                                      color: Colors.black,
-                                      blurRadius: 2,
-                                      offset: Offset(1, 1),
-                                    ),
-                                  ],
-                                ),
+                              child: Image.network(
+                                widget.leaderImage,
+                                width: 600,
+                                height: 400
                               ),
                             )
-                        ],
+                            : Image.network(
+                                widget.leaderImage,
+                                width: 600,
+                                height: 400,
+                              ),
+
+                            if (isAbilityUsed)
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                decoration: BoxDecoration(
+                                  color: Color(0xffeb7233),
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 2,
+                                  )
+                                ),
+                                child: const Text('Ability Used',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.bold,
+                                    shadows: [
+                                      Shadow(
+                                        color: Colors.black,
+                                        blurRadius: 2,
+                                        offset: Offset(1, 1),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                          ],
+                        )
                       ),
                     ),
                   ],
@@ -254,7 +291,10 @@ class _UserHomeState extends State<UserHome> {
 
                   children: <Widget>[
                     ElevatedButton(onPressed: decreaseLife, child: const Text('-')),
-                    Text('$life'),
+                    Image.asset(
+                      'assets/life_images/life_$life.png',
+                      height: 50,
+                    ),
                     ElevatedButton(onPressed: increaseLife, child: const Text('+'))
                   ],
                 ),
@@ -265,42 +305,45 @@ class _UserHomeState extends State<UserHome> {
         ),
 
         drawer: Drawer(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                widget.leader.name,
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold
-                )
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Text(widget.leader.id),
-              const SizedBox(
-                height: 10,
-              ),
-              Text("power: ${widget.leader.power}"),
-              const SizedBox(
-                height: 10,
-              ),
-              Text("(${widget.leader.life}) LIFE"),
-              const SizedBox(
-                height: 10,
-              ),
-              Text(widget.leader.effect),
-              const SizedBox(
-                height: 10,
-              ),
-              ElevatedButton(
-                onPressed: resetStats,
-                child: Text('Reset'),
-              ),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.leader.name,
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold
+                  )
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(widget.leader.id),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text("power: ${widget.leader.power}"),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text("(${widget.leader.life}) LIFE"),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(widget.leader.effect),
+                const SizedBox(
+                  height: 10,
+                ),
+                ElevatedButton(
+                  onPressed: resetStats,
+                  child: Text('Reset'),
+                ),
+              ],
+            ),
           ),
-        ),
+        ) 
       )
     );
   }

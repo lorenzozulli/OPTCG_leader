@@ -102,8 +102,8 @@ class _LeaderDetailsState extends State<Leaderdetails>{
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           clipBehavior: Clip.hardEdge,
-          decoration: const BoxDecoration(
-            color: Colors.white,
+          decoration: BoxDecoration(
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20),
               topRight: Radius.circular(20)

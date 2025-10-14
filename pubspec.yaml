@@ -92,6 +92,19 @@ flutter:
      - assets/backgrounds/purple_yellow.png
      - assets/backgrounds/black_yellow.png
 
+     - assets/life_images/life_0.png
+     - assets/life_images/life_1.png
+     - assets/life_images/life_2.png
+     - assets/life_images/life_3.png
+     - assets/life_images/life_4.png
+     - assets/life_images/life_5.png
+     - assets/life_images/life_6.png
+     - assets/life_images/life_7.png
+     - assets/life_images/life_8.png
+     - assets/life_images/life_9.png
+     - assets/life_images/life_10.png
+
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

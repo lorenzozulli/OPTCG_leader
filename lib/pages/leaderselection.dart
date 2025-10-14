@@ -110,6 +110,7 @@ class _LeaderSelectionState extends State<LeaderSelection> {
                             Text(
                               _filteredLeaders[index].name,
                               style: const TextStyle(
+                                fontSize: 22,
                                 overflow: TextOverflow.ellipsis,
                                 fontWeight: FontWeight.bold
                               )
