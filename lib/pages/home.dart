@@ -159,6 +159,7 @@ class _UserHomeState extends State<UserHome> with SingleTickerProviderStateMixin
     );
   }
 
+  @override
   void dispose() {
     _animationController.dispose();
     super.dispose();
@@ -253,7 +254,9 @@ class _UserHomeState extends State<UserHome> with SingleTickerProviderStateMixin
                               ),
 
                             if (isAbilityUsed)
-                              Container(
+                            Transform(
+                              transform: Matrix4.translationValues(0.0, 0.0, -75.0),
+                              child: Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                                 decoration: BoxDecoration(
                                   color: Color(0xffeb7233),
@@ -261,7 +264,15 @@ class _UserHomeState extends State<UserHome> with SingleTickerProviderStateMixin
                                   border: Border.all(
                                     color: Colors.white,
                                     width: 2,
-                                  )
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withValues(alpha: 0.65), // Colore dell'ombra e trasparenza
+                                      spreadRadius: 3, // Espansione dell'ombra (quanto è grande)
+                                      blurRadius: 15, // Sfocatura (quanto è morbida)
+                                      offset: Offset(5, 8), // Spostamento dell'ombra (x, y)
+                                    ),
+                                  ],
                                 ),
                                 child: const Text('Ability Used',
                                   style: TextStyle(
@@ -278,6 +289,7 @@ class _UserHomeState extends State<UserHome> with SingleTickerProviderStateMixin
                                   ),
                                 ),
                               )
+                            )
                           ],
                         )
                       ),
