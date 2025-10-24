@@ -94,6 +94,11 @@ class _LeaderDetailsState extends State<Leaderdetails>{
   }
 
   DraggableScrollableSheet scroll() {
+    final allImages = [
+      widget.leader.images.imageEn,
+      ...widget.leader.images.imagesAlt
+    ];
+    final pageController = PageController();
     return DraggableScrollableSheet(
       initialChildSize: 0.6,
       maxChildSize: 1.0,
@@ -184,51 +189,63 @@ class _LeaderDetailsState extends State<Leaderdetails>{
                 const SizedBox(
                   height: 10,
                 ),
-                InkWell(
-                  onTap: (){
-                    _completeOnBoarding(widget.leader.images.imageEn);
-                  },
-                  child: Image.network(
-                    widget.leader.images.imageEn,
-                    height: 300,
-                  )
+                Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.arrow_back),
+                      onPressed: () {
+                        pageController.previousPage(
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeIn,
+                        );
+                      },
+                    ),
+                    Expanded(
+                      child: SizedBox(
+                      height: 300,
+                      child: PageView.builder(
+                        controller: pageController,
+                        itemCount: allImages.length,
+                        itemBuilder: (context, index) {
+                          final imageUrl = allImages[index];
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: InkWell(
+                              onTap: () {
+                                _completeOnBoarding(imageUrl);
+                              },
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(12.0),
+                                child: Image.network(
+                                  imageUrl,
+                                  fit: BoxFit.contain, 
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.arrow_forward),
+                      onPressed: () {
+                        pageController.nextPage(
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeIn,
+                        );
+                      },
+                    )
+                  ],
                 ),
                 const SizedBox(
-                  height: 10,
-                ),
-                ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: widget.leader.images.imagesAlt.length,
-                  itemBuilder: (context, index) => altLeaders(context, index)
+                  height:20
                 ),
               ],
             ),
           ),
         );
       }
-    );
-  }
-
-  Padding altLeaders(BuildContext context, index) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20),
-      child: Row(
-        children: [
-          const SizedBox(
-            width: 10,
-          ),
-          InkWell(
-            onTap: () {
-              _completeOnBoarding(widget.leader.images.imagesAlt[index]);
-            },
-            child: Image.network(
-              widget.leader.images.imagesAlt[index],
-              height: 300,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
