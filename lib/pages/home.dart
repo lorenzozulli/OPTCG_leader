@@ -218,85 +218,86 @@ class _UserHomeState extends State<UserHome> with SingleTickerProviderStateMixin
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
-                      child: Center(
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              isAbilityUsed = !isAbilityUsed;
-                            });
-                          },
-                          onPanUpdate: _onPanUpdate,
-                          onPanEnd: _onPanEnd,
-                          child: Transform(
-                            transform: Matrix4.identity()
-                            ..setEntry(3, 2, 0.001) // Prospettiva
-                            ..rotateX(_xRotation)
-                            ..rotateY(_yRotation),
-                            alignment: Alignment.center,
-                            child: Stack(
-                            alignment: Alignment.center,
-                              children: [
-                                FittedBox(
-                                  fit: BoxFit.fitHeight,
-                                  child: isAbilityUsed ? ColorFiltered(
-                                    colorFilter: const ColorFilter.mode(
-                                      Colors.transparent,
-                                      BlendMode.color,
+                    child: Center(
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isAbilityUsed = !isAbilityUsed;
+                          });
+                        },
+                        onPanUpdate: _onPanUpdate,
+                        onPanEnd: _onPanEnd,
+                        child: Transform(
+                          transform: Matrix4.identity()
+                          ..setEntry(3, 2, 0.001) // Prospettiva
+                          ..rotateX(_xRotation)
+                          ..rotateY(_yRotation),
+                          alignment: Alignment.center,
+                          child: Stack(
+                          alignment: Alignment.center,
+                            children: [
+                              FittedBox(
+                                fit: BoxFit.fitHeight,
+                                child: isAbilityUsed ? ColorFiltered(
+                                  colorFilter: const ColorFilter.mode(
+                                    Colors.transparent,
+                                    BlendMode.color,
+                                  ),
+                                  child: Image.network(
+                                    widget.leaderImage,
+                                  ),
+                                )
+                                : Image.network(
+                                    widget.leaderImage,
+                                  ),
+                              ),
+                              if (isAbilityUsed)
+                              Transform(
+                                transform: Matrix4.translationValues(0.0, 0.0, -75.0),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                  decoration: BoxDecoration(
+                                    color: Color(0xffeb7233),
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(
+                                      color: Colors.white,
+                                      width: 2,
                                     ),
-                                    child: Image.network(
-                                      widget.leaderImage,
-                                    ),
-                                  )
-                                  : Image.network(
-                                      widget.leaderImage,
-                                    ),
-                                ),
-                                  if (isAbilityUsed)
-                                  Transform(
-                                    transform: Matrix4.translationValues(0.0, 0.0, -75.0),
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                      decoration: BoxDecoration(
-                                        color: Color(0xffeb7233),
-                                        borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(
-                                          color: Colors.white,
-                                          width: 2,
-                                        ),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.black.withValues(alpha: 0.65), // Colore dell'ombra e trasparenza
-                                            spreadRadius: 3, // Espansione dell'ombra (quanto è grande)
-                                            blurRadius: 15, // Sfocatura (quanto è morbida)
-                                            offset: Offset(5, 8), // Spostamento dell'ombra (x, y)
-                                          ),
-                                        ],
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withValues(alpha: 0.65),
+                                        spreadRadius: 3,
+                                        blurRadius: 15,
+                                        offset: Offset(5, 8),
                                       ),
-                                      child: const Text('Ability Used',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 30,
-                                          fontWeight: FontWeight.bold,
-                                          shadows: [
-                                            Shadow(
-                                              color: Colors.black,
-                                              blurRadius: 2,
-                                              offset: Offset(1, 1),
-                                            ),
-                                          ],
+                                    ],
+                                  ),
+                                  child: const Text('Ability Used',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.bold,
+                                      shadows: [
+                                        Shadow(
+                                          color: Colors.black,
+                                          blurRadius: 2,
+                                          offset: Offset(1, 1),
                                         ),
-                                      ),
-                                    )
-                                  )
-                                ],
+                                      ],
+                                    ),
+                                  ),
+                                )
                               )
+                            ],
+                          )
                         ),
                       ),
                     ),
                   ) 
                 ),
 
-                Padding(padding: EdgeInsetsGeometry.only(bottom: 10.0),
+                Padding(
+                  padding: EdgeInsetsGeometry.only(bottom: 10.0),
                   child:Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -309,12 +310,10 @@ class _UserHomeState extends State<UserHome> with SingleTickerProviderStateMixin
                       ),
                       ElevatedButton(onPressed: increaseLife, child: const Text('+'))
                     ],
-                )
-
+                  )
                 ),
               ]
             ),
-            
           ],
         ),
 
