@@ -104,6 +104,8 @@ flutter:
      - assets/life_images/life_9.png
      - assets/life_images/life_10.png
 
+     - assets/url.txt
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

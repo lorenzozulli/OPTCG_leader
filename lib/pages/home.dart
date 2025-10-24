@@ -21,10 +21,10 @@ class UserHome extends StatefulWidget{
 }
 
 class _UserHomeState extends State<UserHome> with SingleTickerProviderStateMixin {
-  late int power;
+  late int power = 0;
   late String leaderName;
   late String leaderId;
-  late int life;
+  late int life = 0;
   late String leaderColors;
   late ThemeSwitcher themeSwitcher;
   bool isAbilityUsed = false;
@@ -32,7 +32,7 @@ class _UserHomeState extends State<UserHome> with SingleTickerProviderStateMixin
 
   double _xRotation = 0.0;
   double _yRotation = 0.0;
-  final double _maxRotation = 0.4; // Limite massimo di rotazione
+  final double _maxRotation = 0.4;
   late final AnimationController _animationController;
 
   void increasePower(){
@@ -204,14 +204,34 @@ class _UserHomeState extends State<UserHome> with SingleTickerProviderStateMixin
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
-                    ElevatedButton(onPressed: decreasePower, child: const Text('-')),
+                    ElevatedButton(
+                      onPressed: decreasePower,
+                      child: const Text(
+                      '-',
+                      style: TextStyle(
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold
+                      )
+                      )
+                    ),
                     Text(
                       '$lint$power',
                       style: TextStyle(
-                        fontSize: 30
+                        fontSize: 50,
+                        color: Color(0xffffffff),
+                        fontWeight: FontWeight.bold
                       )
                     ),
-                    ElevatedButton(onPressed: increasePower, child: const Text('+'))
+                    ElevatedButton(
+                      onPressed: increasePower,
+                      child: const Text(
+                        '+',
+                        style: TextStyle(
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold
+                        )
+                      )
+                    )
                   ],
                 ),
 
@@ -303,12 +323,30 @@ class _UserHomeState extends State<UserHome> with SingleTickerProviderStateMixin
                     crossAxisAlignment: CrossAxisAlignment.end,
 
                     children: <Widget>[
-                      ElevatedButton(onPressed: decreaseLife, child: const Text('-')),
+                      ElevatedButton(
+                        onPressed: decreaseLife,
+                        child: const Text(
+                          '-',
+                          style: TextStyle(
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold
+                          )
+                        )
+                      ),
                       Image.asset(
                         'assets/life_images/life_$life.png',
                         height: 50,
                       ),
-                      ElevatedButton(onPressed: increaseLife, child: const Text('+'))
+                      ElevatedButton(
+                        onPressed: increaseLife, 
+                        child: const Text(
+                          '+',
+                          style: TextStyle(
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold
+                          )
+                        )
+                      )
                     ],
                   )
                 ),

@@ -12,7 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
   final bool isFirstTime = prefs.getBool('isFirstTime') ?? true;
   final String leaderImage = prefs.getString('leaderImage') ?? '';
-  final String leaderJson = prefs.getString('leader') ?? '';
+  final String leaderJson = prefs.getString('leader') ?? '{"name":"Hannyabal","id":"EB01-021","images":{"image_en":"https://en.onepiece-cardgame.com/images/cardlist/card/EB01-021.png?250701","images_alt":["https://en.onepiece-cardgame.com/images/cardlist/card/EB01-021_p1.png?250701","https://en.onepiece-cardgame.com/images/cardlist/card/EB01-021_p2.png?250701"]},"life":"4","power":"5000","colors":["blue","purple"],"effect":"[End of Your Turn] You may return 1 of your {Impel Down} type Characters with a cost of 2 or more to the owner\'s hand: Add up to 1 DON!! card from your DON!! deck and set it as active."}';
   final bool isNewLeader = prefs.getBool('isNewLeader') ?? false;
 
   Map<String, dynamic> leaderMap = jsonDecode(leaderJson);

@@ -55,11 +55,7 @@ class Leader {
     final prefs = await SharedPreferences.getInstance();
     String? leaderJson = prefs.getString('leader');
 
-    if(leaderJson == null){
-      return null;
-    }
-
-    Map<String, dynamic> leaderMap = jsonDecode(leaderJson);
+    Map<String, dynamic> leaderMap = jsonDecode(leaderJson!);
     Leader leader = Leader.fromJson(leaderMap);
 
     return leader;

@@ -1,10 +1,8 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:optcgcounter_flutter/entities/leader.dart';
 import 'package:optcgcounter_flutter/pages/leaderdetails.dart';
-import 'package:path_provider/path_provider.dart';
 
 class LeaderSelection extends StatefulWidget {
   const LeaderSelection ({super.key});
@@ -18,19 +16,14 @@ class _LeaderSelectionState extends State<LeaderSelection> {
   final SearchController _searchController = SearchController();
   List<Leader> _filteredLeaders = <Leader>[];
 
-  Future<String> get _localPath async {
-    final directory = await getApplicationDocumentsDirectory();
-    return directory.path;
-  }
-
-  Future<File> get _localFile async {
-    final path = await _localPath;
-    return File('$path/optcgcounter_flutter/optcgcounter_flutter/assets/url.txt');
+  Future<String> get _localFile async {
+    String datum = await DefaultAssetBundle.of(context)
+        .loadString("assets/url.txt");
+    return datum;
   }
 
   Future<List<Leader>> fetchLeaders() async {
-    final file = await _localFile;
-    String url = await file.readAsString();
+    String url = await _localFile;
     var response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
