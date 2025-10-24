@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:optcgcounter_flutter/entities/leader.dart';
-import 'package:optcgcounter_flutter/entities/themeswitcher.dart';
+import 'package:optcgcounter_flutter/utils/themes/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserHome extends StatefulWidget{
@@ -26,7 +26,6 @@ class _UserHomeState extends State<UserHome> with SingleTickerProviderStateMixin
   late String leaderId;
   late int life = 0;
   late String leaderColors;
-  late ThemeSwitcher themeSwitcher;
   bool isAbilityUsed = false;
   String lint = '';
 
@@ -151,8 +150,6 @@ class _UserHomeState extends State<UserHome> with SingleTickerProviderStateMixin
       leaderColors = "${widget.leader.colors[0]}_${widget.leader.colors[1]}";
     }
 
-    themeSwitcher = ThemeSwitcher(color: widget.leader.colors[0]);
-
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 400),
@@ -168,8 +165,8 @@ class _UserHomeState extends State<UserHome> with SingleTickerProviderStateMixin
   @override
   Widget build(BuildContext context){
     return MaterialApp(
-      theme: themeSwitcher.themeSwitcher(true, widget.leader.colors[0]),
-      darkTheme: themeSwitcher.themeSwitcher(false, widget.leader.colors[0]),
+      theme: AppThemes.light(schemeName: widget.leader.colors[0]),
+      darkTheme: AppThemes.dark(schemeName: widget.leader.colors[0]),
       home: Scaffold(
         appBar: AppBar(
           title: Text(

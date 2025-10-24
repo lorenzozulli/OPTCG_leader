@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:optcgcounter_flutter/entities/leader.dart';
-import 'package:optcgcounter_flutter/entities/themeswitcher.dart';
 import 'package:optcgcounter_flutter/pages/home.dart';
 import 'package:optcgcounter_flutter/pages/leaderselection.dart';
+import 'package:optcgcounter_flutter/utils/themes/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
  void main() async {
@@ -45,7 +45,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   int pageIndex = 0;
   late final List<Widget> pages;
-  late ThemeSwitcher themeSwitcher;
   
   @override
   void initState() {
@@ -58,16 +57,13 @@ class _MyAppState extends State<MyApp> {
       ),
       LeaderSelection(),
     ];
-
-    themeSwitcher = ThemeSwitcher(color: widget.leader.colors[0]);
   }
   
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: themeSwitcher.themeSwitcher(true, widget.leader.colors[0]),
-      darkTheme: themeSwitcher.themeSwitcher(false, widget.leader.colors[0]),
-
+      theme: AppThemes.light(schemeName: widget.leader.colors[0]),
+      darkTheme: AppThemes.dark(schemeName: widget.leader.colors[0]),
       home: widget.isFirstTime ? LeaderSelection() : Scaffold(
         body: pages[pageIndex],
         bottomNavigationBar: BottomNavigationBar(
